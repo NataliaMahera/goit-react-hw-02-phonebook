@@ -1,16 +1,87 @@
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
-  );
-};
+import React, { Component } from 'react';
+import { nanoid } from 'nanoid';
+import { ContactForm } from './ContactForm/ContactForm';
+import { ContactList } from './ContactList/ContactList';
+import { Filter } from './Filter/Filter';
+import { Section } from './Section/Section';
+import { Container } from './Container/Container';
+
+export class App extends Component {
+  state = {
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
+    filter: '',
+  };
+
+  // Форма віддає свій state через props onSubmitForm в компоненті, щоб при сабміті віддати в апп тільки свої дані.
+  addContactOnSubmit = inputContact => {
+    const { contacts } = this.state;
+    const isExist = contacts.some(({ name }) => name === inputContact.name);
+
+    if (isExist) {
+      alert(`${inputContact.name} is already in contacts.`);
+      return;
+    }
+
+    const finalInputContact = {
+      ...inputContact,
+      id: nanoid(),
+    };
+
+    this.setState(({ contacts }) => ({
+      contacts: [...contacts, finalInputContact],
+    }));
+  };
+
+  onChangeFilter = event => {
+    this.setState({ filter: event.currentTarget.value });
+  };
+
+  getVisibleContacts = () => {
+    const { contacts, filter } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+
+    return contacts.filter(({ name }) =>
+      name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  onDeleteContact = contactId => {
+    this.setState(({ contacts }) => {
+      return {
+        contacts: contacts.filter(({ id }) => id !== contactId),
+      };
+    });
+  };
+
+  render() {
+    const { filter, contacts } = this.state;
+
+    return (
+      <Container>
+        <Section title="Phonebook">
+          <ContactForm onSubmitForm={this.addContactOnSubmit} />
+        </Section>
+
+        <Section title="Contacts">
+          {contacts.length > 0 ? (
+            <Filter value={filter} onChangeFilter={this.onChangeFilter} />
+          ) : (
+            <p>Your phonebook is empty. Please add your contact.</p>
+          )}
+
+          {contacts.length > 0 && (
+            <ContactList
+              contacts={this.getVisibleContacts()}
+              onDeleteContact={this.onDeleteContact}
+            />
+          )}
+        </Section>
+      </Container>
+    );
+  }
+}
