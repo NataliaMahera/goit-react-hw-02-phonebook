@@ -5,6 +5,7 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { Section } from './Section/Section';
 import { Container } from './Container/Container';
+import { Notification } from './Notification/Notification';
 
 export class App extends Component {
   state = {
@@ -18,6 +19,7 @@ export class App extends Component {
   };
 
   // Форма віддає свій state через props onSubmitForm в компоненті, щоб при сабміті віддати в апп тільки свої дані.
+
   addContactOnSubmit = inputContact => {
     const { contacts } = this.state;
     const isExist = contacts.some(({ name }) => name === inputContact.name);
@@ -71,7 +73,7 @@ export class App extends Component {
           {contacts.length > 0 ? (
             <Filter value={filter} onChangeFilter={this.onChangeFilter} />
           ) : (
-            <p>Your phonebook is empty. Please add your contact.</p>
+            <Notification message="Your phonebook is empty. Please add your contact!" />
           )}
 
           {contacts.length > 0 && (
