@@ -22,7 +22,9 @@ export class App extends Component {
 
   addContactOnSubmit = inputContact => {
     const { contacts } = this.state;
-    const isExist = contacts.some(({ name }) => name === inputContact.name);
+    const isExist = contacts.some(
+      ({ name }) => name.toLowerCase() === inputContact.name.toLowerCase()
+    );
 
     if (isExist) {
       alert(`${inputContact.name} is already in contacts.`);
