@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import css from './ContactForm.module.css';
+import { Input } from 'components/Input/Input';
 
 export class ContactForm extends Component {
   state = {
@@ -35,7 +36,7 @@ export class ContactForm extends Component {
     const { name, number } = this.state;
     return (
       <form onSubmit={this.handleSubmit} className={css.form}>
-        <label className={css.label}>
+        {/* <label className={css.label}>
           Name
           <input
             type="text"
@@ -46,7 +47,16 @@ export class ContactForm extends Component {
             pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             required
           />
-        </label>
+        </label> */}
+
+        <Input
+          type="text"
+          name="name"
+          className={css.input}
+          value={name}
+          onChange={this.handleChange}
+          pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        />
 
         <label className={css.label}>
           Number
